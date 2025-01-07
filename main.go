@@ -27,10 +27,19 @@ func (Hello) Say(ctx context.Context, helloReq *HelloReq) (HelloRes *HelloRes, e
 	return
 }
 
+func ErrorHandler(r *ghttp.Request) {
+	r.Middleware.Next()
+	if err := r.GetError(); err != nil {
+		r.Response.Write("error occurs: ", err.Error())
+		return
+	}
+}
+
 func main() {
 	fmt.Println("Hello, GF:", gf.VERSION)
 	s := g.Server()
 	s.Group("/", func(group *ghttp.RouterGroup) {
+		group.Middleware(ErrorHandler)
 		group.Bind(
 			new(Hello),
 		)
