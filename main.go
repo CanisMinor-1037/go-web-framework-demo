@@ -10,7 +10,7 @@ import (
 )
 
 type HelloReq struct {
-	g.Meta `path:"/" method:"get"`
+	g.Meta `path:"/" method:"get" tags:"Test" summary:"Hello world test case"`
 	Name string `v:"required" json:"name" dc:"姓名"`
 	Age  int `v:"required" json:"age" dc:"年龄"`
 }
@@ -67,6 +67,8 @@ func main() {
 			new(Hello),
 		)
 	})
+	s.SetOpenApiPath("/api.json")
+	s.SetSwaggerPath("/swagger")
 	s.SetPort(8080)
 	s.Run()
 }
